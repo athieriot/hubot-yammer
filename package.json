@@ -1,0 +1,31 @@
+{
+  "name": "hubot-yammer",
+  "version": "0.0.1",
+  "author": "Aurélien Thieriot",
+  "keywords": [
+    "github hubot yammer adapter"
+  ],
+  "description": "A Yammer adapter for hubot",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/tombell/hubot-twilio/raw/master/LICENSE"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/athieriot/hubot-yammer.git"
+  },
+  "dependencies": {
+    "hubot": ">=2.0.5",
+    "oauth": "0.9.5"
+  },
+  "devDependencies": {
+    "coffee-script": "1.1.3"
+  },
+  "main": "./src/yammer",
+  "engine": "node > 0.6.0 < 0.7.0",
+  "engines": {
+    "node": "*"
+  }
+}
