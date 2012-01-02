@@ -3,7 +3,7 @@
 ## Description
 
 This is the [Yammer](http://www.yammer.com) adapter for hubot that allows you to
-send a message to your Hubot and he will reply to you.
+send a message to him with Yammer and he will happily reply the same way.
 
 ## Installation
 
@@ -30,25 +30,25 @@ You will need to set some environment variables to use this adapter.
    export HUBOT\_YAMMER\_TOKEN="token"
    export HUBOT\_YAMMER\_TOKEN\_SECRET="secret"
 
-## How to get your credential informations
+## How do you get your credential informations
 
 An easy way to get your access codes is to use [nyam](https://github.com/csanz/node-nyam).
 
 Nyam is a node.js CLI tool wich can help you to setup Yammer authorizations.
 
-1. First, log on to Yammer and get your own application keys.
+First, log on to Yammer and get your own application keys.
 
-    https://www.yammer.com/\<DOMAIN\>/client\_applications/new
+    https://www.yammer.com/<DOMAIN>/client_applications/new
 
-1. Install nyam
+Install nyam
 
     npm install nyam -g
 
-Warning: Actually, nyam need a 0.4.x version of node.js. You may want to look at [nvm](https://github.com/creationix/nvm)
+__Warning__: Actually, nyam need a 0.4.x version of node.js. You may want to look at [nvm](https://github.com/creationix/nvm)
 
-1.  To override nyam configuration with your own app keys create the following file:
+To override nyam configuration with your own app keys create the following file:
 
-    ~/.nyam\_keys
+    ~/.nyam_keys
 
 and add the following
 
@@ -57,11 +57,11 @@ and add the following
         "app_consumer_secret": "<CONSUMER SECRET HERE>"
     }
 
-1. Then, start the setup process to give hubot-yammer access to an account 
+Then, start the setup process to give hubot-yammer access to an account 
 
     nyam -s
 
-1. Finally, run nyam with a verbose level to display all the informations you need
+Finally, run nyam with a verbose level to display all the informations you need
 
     nyam --verbose
 
