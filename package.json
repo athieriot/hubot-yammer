@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "coffee-script": "1.1.3",
-    "request": "1.0.106"
+    "request": "2.9.3" 
   },
   "main": "./src/yammer",
   "engine": "node > 0.6.0 < 0.7.0",
