@@ -55,18 +55,11 @@ class YammerRealtime extends EventEmitter
          oauth_signature      : options.secret
          oauth_token_secret   : options.tokensecret
 
-      ##Resolving groupIds
-      @yammer.groups (err, data) ->
-         data.forEach (existing_group) =>
-            options.groups.split(",").forEach (group) =>
-               if group is existing_group.name then groups_ids.push(existing_group.id)
-
-         console.log("groups list : " + options.groups)
-         console.log("groups_ids list : " + groups_ids)
-
+      groups_ids = @resolving_groups_ids options.groups
     else
       throw new Error("Not enough parameters provided. I need a key, a secret, a token, a secret token")
 
+ ## Yammer API call methods    
  listen: (callback) ->
    @yammer.realtime.messages (err, data) ->
       callback err, data.data
@@ -77,7 +70,7 @@ class YammerRealtime extends EventEmitter
       params =
          body        : yamText
          group_id    : group_id
-      console.log "send message in #{params.group_id} with text #{params.body}"
+      console.log "send message in group #{params.group_id} with text #{params.body}"
 
       @create_message params
 
@@ -92,3 +85,16 @@ class YammerRealtime extends EventEmitter
          console.log "yammer send error: #{err} #{data}"
 
       console.log "Status #{res.statusCode}"
+
+ resolving_groups_ids: (groups) ->
+   result = []
+
+   @yammer.groups (err, data) ->
+      data.forEach (existing_group) =>
+         groups.split(",").forEach (group) =>
+            if group is existing_group.name then result.push(existing_group.id)
+
+      console.log("groups list : " + groups)
+      console.log("groups_ids list : " + result)
+
+   result
