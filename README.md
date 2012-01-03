@@ -27,7 +27,7 @@ You will need to set some environment variables to use this adapter.
 
 ### Heroku
 
-   heroku config:add HUBOT\_YAMMER\_KEY="key" HUBOT\_YAMMER\_SECRET="secret" HUBOT\_YAMMER\_TOKEN="token" HUBOT\_YAMMER\_TOKEN\_SECRET="secret" HUBOT\_YAMMER\_TOKEN\_GROUPS="groups list"
+   heroku config:add HUBOT\_YAMMER\_KEY="key" HUBOT\_YAMMER\_SECRET="secret" HUBOT\_YAMMER\_TOKEN="token" HUBOT\_YAMMER\_TOKEN\_SECRET="secret" HUBOT\_YAMMER\_GROUPS="groups list"
 
 ### Non-Heroku environment variables
 
@@ -35,7 +35,7 @@ You will need to set some environment variables to use this adapter.
    export HUBOT\_YAMMER\_SECRET="secret"
    export HUBOT\_YAMMER\_TOKEN="token"
    export HUBOT\_YAMMER\_TOKEN\_SECRET="secret"
-   export HUBOT\_YAMMER\_TOKEN\_GROUPS="groups list"
+   export HUBOT\_YAMMER\_GROUPS="groups list"
 
 ## How do you get your credential informations
 
@@ -83,4 +83,5 @@ Copyright &copy; Aurélien Thieriot. See LICENSE for details.
 ## Thanks
 
 [Mikeal](https://github.com/mikeal) for his great and simple libraries [node-yammer](https://github.com/mikeal/node-yammer.git)
+
 [Mathilde Lemee](https://github.com/MathildeLemee) from wich I shamefully fork the code of [hubot-twitter](https://github.com/MathildeLemee/hubot-twitter.git)
