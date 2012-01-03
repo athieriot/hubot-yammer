@@ -11,6 +11,12 @@ send a message to him with Yammer and he will happily reply the same way.
 * Install dependencies with `npm install`
 * Run hubot with `bin/hubot -a yammer -n the_name_of_the_yammer_bot_account`
 
+## Yammer side
+
+* Create a new account for your bot in your Yammer domain
+* Create a new application for hubot (see bellow)
+* You'll need to create at least one group in wich hubot will talk. By default, this group is "hubot" but you can change him
+
 ### Note if running on Heroku
 
 You will need to change the process type from `app` to `web` in the `Procfile`.
@@ -21,7 +27,7 @@ You will need to set some environment variables to use this adapter.
 
 ### Heroku
 
-   heroku config:add HUBOT\_YAMMER\_KEY="key" HUBOT\_YAMMER\_SECRET="secret" HUBOT\_YAMMER\_TOKEN="token" HUBOT\_YAMMER\_TOKEN\_SECRET="secret"
+   heroku config:add HUBOT\_YAMMER\_KEY="key" HUBOT\_YAMMER\_SECRET="secret" HUBOT\_YAMMER\_TOKEN="token" HUBOT\_YAMMER\_TOKEN\_SECRET="secret" HUBOT\_YAMMER\_TOKEN\_GROUPS="groups list"
 
 ### Non-Heroku environment variables
 
@@ -29,6 +35,7 @@ You will need to set some environment variables to use this adapter.
    export HUBOT\_YAMMER\_SECRET="secret"
    export HUBOT\_YAMMER\_TOKEN="token"
    export HUBOT\_YAMMER\_TOKEN\_SECRET="secret"
+   export HUBOT\_YAMMER\_TOKEN\_GROUPS="groups list"
 
 ## How do you get your credential informations
 
@@ -75,4 +82,5 @@ Copyright &copy; Aurélien Thieriot. See LICENSE for details.
 
 ## Thanks
 
-To [Mathilde Lemee](https://github.com/MathildeLemee) from wich I shamefully fork the code
+[Mikeal](https://github.com/mikeal) for his great and simple libraries [node-yammer](https://github.com/mikeal/node-yammer.git)
+[Mathilde Lemee](https://github.com/MathildeLemee) from wich I shamefully fork the code of [hubot-twitter](https://github.com/MathildeLemee/hubot-twitter.git)

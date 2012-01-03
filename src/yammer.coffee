@@ -25,6 +25,7 @@ class YammerAdapter extends Adapter
     secret      : process.env.HUBOT_YAMMER_SECRET
     token       : process.env.HUBOT_YAMMER_TOKEN
     tokensecret : process.env.HUBOT_YAMMER_TOKEN_SECRET
+    groups      : process.env.HUBOT_YAMMER_GROUPS or "hubot" 
    bot = new YammerRealtime(options)
 
    bot.listen (err, data) ->
@@ -45,24 +46,49 @@ exports.use = (robot) ->
 
 class YammerRealtime extends EventEmitter
  self = @
+ groups_ids = []
  constructor: (options) ->
     if options.token? and options.secret? and options.key? and options.tokensecret?
-      @yammer = new Yammer({
-         "oauth_consumer_key": options.key,
-         "oauth_token": options.token,
-         "oauth_signature": options.secret,
-         "oauth_token_secret": options.tokensecret
-      })
+      @yammer = new Yammer
+         oauth_consumer_key   : options.key
+         oauth_token          : options.token
+         oauth_signature      : options.secret
+         oauth_token_secret   : options.tokensecret
+
+      ##Resolving groupIds
+      @yammer.groups (err, data) ->
+         data.forEach (existing_group) =>
+            options.groups.split(",").forEach (group) =>
+               if group is existing_group.name then groups_ids.push(existing_group.id)
+
+         console.log("groups list : " + options.groups)
+         console.log("groups_ids list : " + groups_ids)
+
     else
       throw new Error("Not enough parameters provided. I need a key, a secret, a token, a secret token")
 
  listen: (callback) ->
-    @yammer.realtime.messages (err, data) ->
-       callback err, data.data
+   @yammer.realtime.messages (err, data) ->
+      callback err, data.data
 
- send : (user,yamText) ->
-   console.log "send message to #{user} with text #{yamText}"
-   @yammer.createMessage {"body": yamText}, (err, data, res) ->
+ send: (user,yamText) ->
+   ##TODO: Adapt to flood overflow
+   groups_ids.forEach (group_id) =>
+      params =
+         body        : yamText
+         group_id    : group_id
+      console.log "send message in #{params.group_id} with text #{params.body}"
+
+      @create_message params
+
+ ##TODO: Write the reply fonction
+ reply: (user,yamText) ->
+   console.log("reply")
+
+ ## Utility methods
+ create_message: (params) ->
+   @yammer.createMessage params, (err, data, res) ->
       if err
          console.log "yammer send error: #{err} #{data}"
+
       console.log "Status #{res.statusCode}"
