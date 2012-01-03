@@ -17,11 +17,11 @@
     "url": "git://github.com/athieriot/hubot-yammer.git"
   },
   "dependencies": {
-    "hubot": ">=2.0.5",
-    "oauth": "0.9.5"
+    "hubot": ">=2.0.5"
   },
   "devDependencies": {
-    "coffee-script": "1.1.3"
+    "coffee-script": "1.1.3",
+    "request": "1.0.106"
   },
   "main": "./src/yammer",
   "engine": "node > 0.6.0 < 0.7.0",
