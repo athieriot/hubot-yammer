@@ -1,6 +1,6 @@
 {
   "name": "hubot-yammer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Aurélien Thieriot",
   "keywords": [
     "github hubot yammer adapter"
@@ -17,7 +17,7 @@
     "url": "git://github.com/athieriot/hubot-yammer.git"
   },
   "dependencies": {
-    "hubot": ">=2.0.5",
+    "hubot": ">=2.3.0",
     "request": "2.9.3" 
   },
   "devDependencies": {
