@@ -1,4 +1,6 @@
-{Adapter,Robot} = require 'hubot'
+Robot   = require('hubot').Robot
+Adapter = require('hubot').Adapter
+TextMessage = require('hubot').TextMessage
 
 HTTPS        = require 'https'
 EventEmitter = require('events').EventEmitter
@@ -38,7 +40,7 @@ class YammerAdapter extends Adapter
          message = message.body.plain
          console.log "received #{message} from #{user_name}"
 
-         self.receive new Robot.TextMessage user_name, message
+         self.receive new TextMessage user_name, message
       if err
          console.log "received error: #{err}"
 
