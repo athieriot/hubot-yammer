@@ -45,6 +45,7 @@ class YammerAdapter extends Adapter
          console.log "received error: #{err}"
 
    @bot = bot
+   self.emit 'connected' 
 
 exports.use = (robot) ->
  new YammerAdapter robot
