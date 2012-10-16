@@ -115,6 +115,9 @@ class YammerRealtime extends EventEmitter
       console.log "groups list : " + groups
       console.log "groups_ids list : " + result
 
+      if result.length is 0
+         throw new Error "No group registered or an error occured to resolve IDs."
+
    result
 
  resolving_user_id: (user, callback) ->
