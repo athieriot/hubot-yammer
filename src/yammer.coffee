@@ -109,7 +109,7 @@ class YammerRealtime extends EventEmitter
       else
          data.forEach (existing_group) =>
             groups.split(",").forEach (group) =>
-               if group is existing_group.name
+               if group.toString().toLowerCase() is existing_group.name.toString().toLowerCase()
                   result.push existing_group.id
 
       console.log "groups list : " + groups
@@ -126,5 +126,5 @@ class YammerRealtime extends EventEmitter
          console.log "yammer users error: #{err} #{data}" 
       else
          data.forEach (existing_user) =>
-            if user.toString() is existing_user.name.toString()
+            if user.toString().toLowerCase() is existing_user.name.toString().toLowerCase()
                 callback existing_user.id
