@@ -19,7 +19,6 @@ class YammerAdapter extends Adapter
 
  prepare_string: (str, callback) ->
      text = str
- #   yamsText = str.split('\')
      yamsText = [str]
      yamsText.forEach (yamText) => 
         callback yamText
