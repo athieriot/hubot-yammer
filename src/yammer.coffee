@@ -37,10 +37,16 @@ class YammerAdapter extends Adapter
       user_name = (reference.name for reference in data.references when reference.type is "user")
 
       data.messages.forEach (message) =>
+         thread_id = message.thread_id
+         sender_id = message.sender_id
          message = message.body.plain
-         console.log "received #{message} from #{user_name}"
+         console.log "received #{message} from #{user_name} (thread_id: #{thread_id}, sender_id: #{sender_id})"
+         user =
+           name: user_name
+           id: sender_id
+           thread_id: thread_id
 
-         self.receive new TextMessage user_name, message
+         self.receive new TextMessage user, message
       if err
          console.log "received error: #{err}"
 
@@ -71,11 +77,28 @@ class YammerRealtime extends EventEmitter
       callback err, data.data
 
  send: (user,yamText) ->
+   og_url = null
+   og_fetch = false
+   urls = yamText.match /\bhttps?:\/\/[^ ]+/
+   if urls
+     og_url = urls[0]
+     if og_url.match /.*\.(gif|png|jpg|jpeg)/i
+       # Try to identify images
+       og_image = og_url
+     else
+       # let yammer do its best...
+       og_fetch = true
+
+
    #TODO: Adapt to flood overflow
    groups_ids.forEach (group_id) =>
       params =
-         body        : yamText
-         group_id    : group_id
+         body          : yamText
+         group_id      : group_id
+         replied_to_id : if user then user.thread_id else null
+         og_url        : og_url
+         og_fetch      : og_fetch
+         og_image      : og_image
 
       console.log "send message to group #{params.group_id} with text #{params.body}"
       @create_message params
