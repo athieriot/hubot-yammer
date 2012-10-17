@@ -95,7 +95,7 @@ class YammerRealtime extends EventEmitter
       params =
          body          : yamText
          group_id      : group_id
-         replied_to_id : user.thread_id
+         replied_to_id : if user then user.thread_id else null
          og_url        : og_url
          og_fetch      : og_fetch
          og_image      : og_image
