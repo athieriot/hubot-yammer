@@ -37,10 +37,16 @@ class YammerAdapter extends Adapter
       user_name = (reference.name for reference in data.references when reference.type is "user")
 
       data.messages.forEach (message) =>
+         thread_id = message.thread_id
+         sender_id = message.sender_id
          message = message.body.plain
-         console.log "received #{message} from #{user_name}"
+         console.log "received #{message} from #{user_name} (thread_id: #{thread_id}, sender_id: #{sender_id})"
+         user =
+           name: user_name
+           id: sender_id
+           thread_id: thread_id
 
-         self.receive new TextMessage user_name, message
+         self.receive new TextMessage user, message
       if err
          console.log "received error: #{err}"
 
@@ -76,6 +82,7 @@ class YammerRealtime extends EventEmitter
       params =
          body        : yamText
          group_id    : group_id
+         replied_to_id: user.thread_id
 
       console.log "send message to group #{params.group_id} with text #{params.body}"
       @create_message params
