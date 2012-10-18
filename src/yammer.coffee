@@ -76,42 +76,43 @@ class YammerRealtime extends EventEmitter
    @yammer.realtime.messages (err, data) ->
       callback err, data.data
 
- send: (user,yamText) ->
-   og_url = null
-   og_fetch = false
-   urls = yamText.match /\bhttps?:\/\/[^ ]+/
-   if urls
-     og_url = urls[0]
-     if og_url.match /.*\.(gif|png|jpg|jpeg)/i
-       # Try to identify images
-       og_image = og_url
-     else
-       # let yammer do its best...
-       og_fetch = true
+ send: (user, yamText) ->
+   if user && user.thread_id
+     @reply user, yamText
+   else
+     og_url = null
+     og_fetch = false
+     urls = yamText.match /\bhttps?:\/\/[^ ]+/
+     if urls
+       og_url = urls[0]
+       if og_url.match /.*\.(gif|png|jpg|jpeg)/i
+         # Try to identify images
+         og_image = og_url
+       else
+         # let yammer do its best...
+         og_fetch = true
 
 
-   #TODO: Adapt to flood overflow
-   groups_ids.forEach (group_id) =>
-      params =
+     #TODO: Adapt to flood overflow
+     groups_ids.forEach (group_id) =>
+       params =
          body          : yamText
          group_id      : group_id
-         replied_to_id : if user then user.thread_id else null
          og_url        : og_url
          og_fetch      : og_fetch
          og_image      : og_image
 
-      console.log "send message to group #{params.group_id} with text #{params.body}"
-      @create_message params
+       console.log "send message to group #{params.group_id} with text #{params.body}"
+       @create_message params
 
- reply: (user,yamText) ->
-   @resolving_user_id user, (user_id) =>
-      if user_id
-         params =
-            body          : yamText
-            direct_to_id  : user_id
+ reply: (user, yamText) ->
+   if user && user.thread_id
+     params =
+       body          : yamText
+       replied_to_id : user.thread_id
 
-         console.log "reply message to #{user} with text #{params.body}"
-         @create_message params
+     console.log "reply message to #{user} with text #{params.body}"
+     @create_message params
 
  ## Utility methods
  create_message: (params) ->
