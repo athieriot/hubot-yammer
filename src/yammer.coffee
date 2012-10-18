@@ -80,27 +80,11 @@ class YammerRealtime extends EventEmitter
    if user && user.thread_id
      @reply user, yamText
    else
-     og_url = null
-     og_fetch = false
-     urls = yamText.match /\bhttps?:\/\/[^ ]+/
-     if urls
-       og_url = urls[0]
-       if og_url.match /.*\.(gif|png|jpg|jpeg)/i
-         # Try to identify images
-         og_image = og_url
-       else
-         # let yammer do its best...
-         og_fetch = true
-
-
      #TODO: Adapt to flood overflow
      groups_ids.forEach (group_id) =>
        params =
          body          : yamText
          group_id      : group_id
-         og_url        : og_url
-         og_fetch      : og_fetch
-         og_image      : og_image
 
        console.log "send message to group #{params.group_id} with text #{params.body}"
        @create_message params
@@ -116,6 +100,18 @@ class YammerRealtime extends EventEmitter
 
  ## Utility methods
  create_message: (params) ->
+   # Build opengraph urls
+   urls = params.body.match /\bhttps?:\/\/[^ ]+/
+   if urls
+     og_url = urls[0]
+     params['og_url'] = og_url
+     if og_url.match /.*\.(gif|png|jpg|jpeg)/i
+       # Try to identify images
+       params['og_image'] = og_url
+     else
+       # let yammer do its best...
+       params['og_fetch'] = true
+
    @yammer.createMessage params, (err, data, res) ->
       if err
          console.log "yammer send error: #{err} #{data}"
