@@ -37,10 +37,16 @@ class YammerAdapter extends Adapter
       user_name = (reference.name for reference in data.references when reference.type is "user")
 
       data.messages.forEach (message) =>
+         thread_id = message.thread_id
+         sender_id = message.sender_id
          message = message.body.plain
-         console.log "received #{message} from #{user_name}"
+         console.log "received #{message} from #{user_name} (thread_id: #{thread_id}, sender_id: #{sender_id})"
+         user =
+           name: user_name
+           id: sender_id
+           thread_id: thread_id
 
-         self.receive new TextMessage user_name, message
+         self.receive new TextMessage user, message
       if err
          console.log "received error: #{err}"
 
@@ -70,25 +76,43 @@ class YammerRealtime extends EventEmitter
    @yammer.realtime.messages (err, data) ->
       callback err, data.data
 
- send: (user,yamText) ->
-   #TODO: Adapt to flood overflow
-   groups_ids.forEach (group_id) =>
-      params =
-         body        : yamText
-         group_id    : group_id
+ send: (user, yamText) ->
+   if user && user.thread_id
+     @reply user, yamText
+   else
+     og_url = null
+     og_fetch = false
+     urls = yamText.match /\bhttps?:\/\/[^ ]+/
+     if urls
+       og_url = urls[0]
+       if og_url.match /.*\.(gif|png|jpg|jpeg)/i
+         # Try to identify images
+         og_image = og_url
+       else
+         # let yammer do its best...
+         og_fetch = true
 
-      console.log "send message to group #{params.group_id} with text #{params.body}"
-      @create_message params
 
- reply: (user,yamText) ->
-   @resolving_user_id user, (user_id) =>
-      if user_id
-         params =
-            body          : yamText
-            direct_to_id  : user_id
+     #TODO: Adapt to flood overflow
+     groups_ids.forEach (group_id) =>
+       params =
+         body          : yamText
+         group_id      : group_id
+         og_url        : og_url
+         og_fetch      : og_fetch
+         og_image      : og_image
 
-         console.log "reply message to #{user} with text #{params.body}"
-         @create_message params
+       console.log "send message to group #{params.group_id} with text #{params.body}"
+       @create_message params
+
+ reply: (user, yamText) ->
+   if user && user.thread_id
+     params =
+       body          : yamText
+       replied_to_id : user.thread_id
+
+     console.log "reply message to #{user} with text #{params.body}"
+     @create_message params
 
  ## Utility methods
  create_message: (params) ->
