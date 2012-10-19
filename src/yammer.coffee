@@ -30,7 +30,8 @@ class YammerAdapter extends Adapter
     secret      : process.env.HUBOT_YAMMER_SECRET
     token       : process.env.HUBOT_YAMMER_TOKEN
     tokensecret : process.env.HUBOT_YAMMER_TOKEN_SECRET
-    groups      : process.env.HUBOT_YAMMER_GROUPS or "hubot" 
+    groups      : process.env.HUBOT_YAMMER_GROUPS or "hubot"
+    reply_self  : process.env.HUBOT_YAMMER_REPLY_SELF # for debugging use:  HUBOT_YAMMER_REPLY_SELF=1 bin/hubot -n bot -a yammer
    bot = new YammerRealtime(options)
 
    bot.listen (err, data, self_id) ->
@@ -41,7 +42,7 @@ class YammerAdapter extends Adapter
          sender_id = message.sender_id
          text = message.body.plain
          console.log "received #{text} from #{user_name} (thread_id: #{thread_id}, sender_id: #{sender_id})"
-         if self_id == sender_id
+         if self_id == sender_id && !bot.reply_self
            console.log "hubot does not reply himself, hubot not crazy nor desperate"
          else
            user =
@@ -70,6 +71,7 @@ class YammerRealtime extends EventEmitter
          oauth_token_secret   : options.tokensecret
 
       groups_ids = @resolving_groups_ids options.groups
+      @reply_self = options.reply_self
     else
       throw new Error "Not enough parameters provided. I need a key, a secret, a token, a secret token"
 
