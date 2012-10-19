@@ -43,7 +43,8 @@ class YammerAdapter extends Adapter
          text = message.body.plain
          console.log "received #{text} from #{user_name} (thread_id: #{thread_id}, sender_id: #{sender_id})"
          if self_id == sender_id && !bot.reply_self
-           console.log "hubot does not reply himself, hubot not crazy nor desperate"
+           me = self.robot.name
+           console.log "#{me} does not reply himself, #{me} not crazy nor desperate"
          else
            user =
              name: user_name
