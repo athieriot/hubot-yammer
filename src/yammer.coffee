@@ -30,23 +30,27 @@ class YammerAdapter extends Adapter
     secret      : process.env.HUBOT_YAMMER_SECRET
     token       : process.env.HUBOT_YAMMER_TOKEN
     tokensecret : process.env.HUBOT_YAMMER_TOKEN_SECRET
-    groups      : process.env.HUBOT_YAMMER_GROUPS or "hubot" 
+    groups      : process.env.HUBOT_YAMMER_GROUPS or "hubot"
+    reply_self  : process.env.HUBOT_YAMMER_REPLY_SELF # for debugging use:  HUBOT_YAMMER_REPLY_SELF=1 bin/hubot -n bot -a yammer
    bot = new YammerRealtime(options)
 
    bot.listen (err, data) ->
       user_name = (reference.name for reference in data.references when reference.type is "user")
-
+      self_id = data.meta.current_user_id
       data.messages.forEach (message) =>
          thread_id = message.thread_id
          sender_id = message.sender_id
-         message = message.body.plain
-         console.log "received #{message} from #{user_name} (thread_id: #{thread_id}, sender_id: #{sender_id})"
-         user =
-           name: user_name
-           id: sender_id
-           thread_id: thread_id
-
-         self.receive new TextMessage user, message
+         text = message.body.plain
+         console.log "received #{text} from #{user_name} (thread_id: #{thread_id}, sender_id: #{sender_id})"
+         if self_id == sender_id && !bot.reply_self
+           me = self.robot.name
+           console.log "#{me} does not reply himself, #{me} not crazy nor desperate"
+         else
+           user =
+             name: user_name
+             id: sender_id
+             thread_id: thread_id
+           self.receive new TextMessage user, text
       if err
          console.log "received error: #{err}"
 
@@ -68,13 +72,14 @@ class YammerRealtime extends EventEmitter
          oauth_token_secret   : options.tokensecret
 
       groups_ids = @resolving_groups_ids options.groups
+      @reply_self = options.reply_self
     else
       throw new Error "Not enough parameters provided. I need a key, a secret, a token, a secret token"
 
  ## Yammer API call methods    
  listen: (callback) ->
    @yammer.realtime.messages (err, data) ->
-      callback err, data.data
+     callback err, data.data
 
  send: (user, yamText) ->
    if user && user.thread_id
@@ -95,7 +100,7 @@ class YammerRealtime extends EventEmitter
        body          : yamText
        replied_to_id : user.thread_id
 
-     console.log "reply message to #{user} with text #{params.body}"
+     console.log "reply message to #{user.name} with text #{params.body}"
      @create_message params
 
  ## Utility methods
@@ -139,12 +144,4 @@ class YammerRealtime extends EventEmitter
          throw new Error "No group registered or an error occured to resolve IDs."
 
    result
-
- resolving_user_id: (user, callback) ->
-   @yammer.users (err, data) ->
-      if err
-         console.log "yammer users error: #{err} #{data}" 
-      else
-         data.forEach (existing_user) =>
-            if user.toString().toLowerCase() is existing_user.name.toString().toLowerCase()
-                callback existing_user.id
+ 
