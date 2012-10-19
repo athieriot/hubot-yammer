@@ -34,9 +34,9 @@ class YammerAdapter extends Adapter
     reply_self  : process.env.HUBOT_YAMMER_REPLY_SELF # for debugging use:  HUBOT_YAMMER_REPLY_SELF=1 bin/hubot -n bot -a yammer
    bot = new YammerRealtime(options)
 
-   bot.listen (err, data, self_id) ->
+   bot.listen (err, data) ->
       user_name = (reference.name for reference in data.references when reference.type is "user")
-
+      self_id = data.meta.current_user_id
       data.messages.forEach (message) =>
          thread_id = message.thread_id
          sender_id = message.sender_id
@@ -78,8 +78,7 @@ class YammerRealtime extends EventEmitter
  ## Yammer API call methods    
  listen: (callback) ->
    @yammer.realtime.messages (err, data) ->
-     self_id = data.data.meta.current_user_id
-     callback err, data.data, self_id
+     callback err, data.data
 
  send: (user, yamText) ->
    if user && user.thread_id
