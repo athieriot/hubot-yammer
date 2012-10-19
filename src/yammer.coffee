@@ -33,20 +33,22 @@ class YammerAdapter extends Adapter
     groups      : process.env.HUBOT_YAMMER_GROUPS or "hubot" 
    bot = new YammerRealtime(options)
 
-   bot.listen (err, data) ->
+   bot.listen (err, data, self_id) ->
       user_name = (reference.name for reference in data.references when reference.type is "user")
 
       data.messages.forEach (message) =>
          thread_id = message.thread_id
          sender_id = message.sender_id
-         message = message.body.plain
-         console.log "received #{message} from #{user_name} (thread_id: #{thread_id}, sender_id: #{sender_id})"
-         user =
-           name: user_name
-           id: sender_id
-           thread_id: thread_id
-
-         self.receive new TextMessage user, message
+         text = message.body.plain
+         console.log "received #{text} from #{user_name} (thread_id: #{thread_id}, sender_id: #{sender_id})"
+         if self_id == sender_id
+           console.log "hubot does not reply himself, hubot not crazy nor desperate"
+         else
+           user =
+             name: user_name
+             id: sender_id
+             thread_id: thread_id
+           self.receive new TextMessage user, text
       if err
          console.log "received error: #{err}"
 
@@ -74,7 +76,8 @@ class YammerRealtime extends EventEmitter
  ## Yammer API call methods    
  listen: (callback) ->
    @yammer.realtime.messages (err, data) ->
-      callback err, data.data
+     self_id = data.data.meta.current_user_id
+     callback err, data.data, self_id
 
  send: (user, yamText) ->
    if user && user.thread_id
@@ -95,7 +98,7 @@ class YammerRealtime extends EventEmitter
        body          : yamText
        replied_to_id : user.thread_id
 
-     console.log "reply message to #{user} with text #{params.body}"
+     console.log "reply message to #{user.name} with text #{params.body}"
      @create_message params
 
  ## Utility methods
