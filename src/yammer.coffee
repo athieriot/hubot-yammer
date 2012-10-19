@@ -144,12 +144,4 @@ class YammerRealtime extends EventEmitter
          throw new Error "No group registered or an error occured to resolve IDs."
 
    result
-
- resolving_user_id: (user, callback) ->
-   @yammer.users (err, data) ->
-      if err
-         console.log "yammer users error: #{err} #{data}" 
-      else
-         data.forEach (existing_user) =>
-            if user.toString().toLowerCase() is existing_user.name.toString().toLowerCase()
-                callback existing_user.id
+ 
