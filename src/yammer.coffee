@@ -7,12 +7,14 @@ EventEmitter = require('events').EventEmitter
 Yammer        = require('./node-yammer').Yammer
 
 class YammerAdapter extends Adapter
- send: (user, strings...) ->
+ send: (envelope, strings...) ->
+   user = if envelope.user then envelope.user else envelope
    strings.forEach (str) =>
       @prepare_string str, (yamText) =>
          @bot.send user,yamText
 
- reply: (user, strings...) ->
+ reply: (envelope, strings...) ->
+   user = if envelope.user then envelope.user else envelope
    strings.forEach (str) =>
       @prepare_string str,(yamText) =>
          @bot.reply user,yamText
@@ -144,4 +146,3 @@ class YammerRealtime extends EventEmitter
          throw new Error "No group registered or an error occured to resolve IDs."
 
    result
- 
