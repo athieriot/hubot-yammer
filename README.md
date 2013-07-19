@@ -27,15 +27,15 @@ You will need to set some environment variables to use this adapter.
 
 ### Heroku
 
-   heroku config:add HUBOT\_YAMMER\_KEY="key" HUBOT\_YAMMER\_SECRET="secret" HUBOT\_YAMMER\_TOKEN="token" HUBOT\_YAMMER\_TOKEN\_SECRET="secret" HUBOT\_YAMMER\_GROUPS="groups list"
+    heroku config:add HUBOT\_YAMMER\_KEY="key" HUBOT\_YAMMER\_SECRET="secret" HUBOT\_YAMMER\_TOKEN="token" HUBOT\_YAMMER\_TOKEN\_SECRET="secret" HUBOT\_YAMMER\_GROUPS="groups list"
 
 ### Non-Heroku environment variables
 
-   export HUBOT\_YAMMER\_KEY="key"
-   export HUBOT\_YAMMER\_SECRET="secret"
-   export HUBOT\_YAMMER\_TOKEN="token"
-   export HUBOT\_YAMMER\_TOKEN\_SECRET="secret"
-   export HUBOT\_YAMMER\_GROUPS="groups list"
+    export HUBOT\_YAMMER\_KEY="key"
+    export HUBOT\_YAMMER\_SECRET="secret"
+    export HUBOT\_YAMMER\_TOKEN="token"
+    export HUBOT\_YAMMER\_TOKEN\_SECRET="secret"
+    export HUBOT\_YAMMER\_GROUPS="groups list"
 
 ## How do you get your credential informations
 
