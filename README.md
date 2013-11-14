@@ -89,3 +89,7 @@ Copyright &copy; Aurélien Thieriot. See LICENSE for details.
 [Mikeal](https://github.com/mikeal) for his great and simple libraries [node-yammer](https://github.com/mikeal/node-yammer.git)
 
 [Mathilde Lemee](https://github.com/MathildeLemee) from wich I shamefully fork the code of [hubot-twitter](https://github.com/MathildeLemee/hubot-twitter.git)
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/athieriot/hubot-yammer/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
