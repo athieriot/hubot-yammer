@@ -40,19 +40,21 @@ class YammerAdapter extends Adapter
       user_name = (reference.name for reference in data.references when reference.type is "user")
       self_id = data.meta.current_user_id
       data.messages.forEach (message) =>
-         thread_id = message.thread_id
-         sender_id = message.sender_id
-         text = message.body.plain
-         console.log "received #{text} from #{user_name} (thread_id: #{thread_id}, sender_id: #{sender_id})"
-         if self_id == sender_id && !bot.reply_self
-           me = self.robot.name
-           console.log "#{me} does not reply himself, #{me} not crazy nor desperate"
-         else
-           user =
-             name: user_name
-             id: sender_id
-             thread_id: thread_id
-           self.receive new TextMessage user, text
+         # checking message is received from valid group
+         if message.group_id in bot.groups_ids
+             thread_id = message.thread_id
+             sender_id = message.sender_id
+             text = message.body.plain
+             console.log "received #{text} from #{user_name} (thread_id: #{thread_id}, sender_id: #{sender_id})"
+             if self_id == sender_id && !bot.reply_self
+               me = self.robot.name
+               console.log "#{me} does not reply himself, #{me} not crazy nor desperate"
+             else
+               user =
+                 name: user_name
+                 id: sender_id
+                 thread_id: thread_id
+               self.receive new TextMessage user, text
       if err
          console.log "received error: #{err}"
 
@@ -73,7 +75,7 @@ class YammerRealtime extends EventEmitter
          oauth_signature      : options.secret
          oauth_token_secret   : options.tokensecret
 
-      groups_ids = @resolving_groups_ids options.groups
+      @groups_ids = @resolving_groups_ids options.groups
       @reply_self = options.reply_self
     else
       throw new Error "Not enough parameters provided. I need a key, a secret, a token, a secret token"
