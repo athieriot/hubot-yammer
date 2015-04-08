@@ -4,7 +4,7 @@ TextMessage = require('hubot').TextMessage
 
 HTTPS        = require 'https'
 EventEmitter = require('events').EventEmitter
-Yammer        = require('./node-yammer').Yammer
+Yammer       = require('yammer').Yammer
 
 class YammerAdapter extends Adapter
  send: (envelope, strings...) ->
@@ -22,16 +22,13 @@ class YammerAdapter extends Adapter
  prepare_string: (str, callback) ->
      text = str
      yamsText = [str]
-     yamsText.forEach (yamText) => 
+     yamsText.forEach (yamText) =>
         callback yamText
 
  run: ->
    self = @
    options =
-    key         : process.env.HUBOT_YAMMER_KEY
-    secret      : process.env.HUBOT_YAMMER_SECRET
-    token       : process.env.HUBOT_YAMMER_TOKEN
-    tokensecret : process.env.HUBOT_YAMMER_TOKEN_SECRET
+    access_token: process.env.HUBOT_YAMMER_ACCESS_TOKEN
     groups      : process.env.HUBOT_YAMMER_GROUPS or "hubot"
     reply_self  : process.env.HUBOT_YAMMER_REPLY_SELF # for debugging use:  HUBOT_YAMMER_REPLY_SELF=1 bin/hubot -n bot -a yammer
    bot = new YammerRealtime(options)
@@ -59,7 +56,7 @@ class YammerAdapter extends Adapter
          console.log "received error: #{err}"
 
    @bot = bot
-   self.emit 'connected' 
+   self.emit 'connected'
 
 exports.use = (robot) ->
  new YammerAdapter robot
@@ -68,19 +65,16 @@ class YammerRealtime extends EventEmitter
  self = @
  groups_ids = []
  constructor: (options) ->
-    if options.token? and options.secret? and options.key? and options.tokensecret?
+    if options.access_token?
       @yammer = new Yammer
-         oauth_consumer_key   : options.key
-         oauth_token          : options.token
-         oauth_signature      : options.secret
-         oauth_token_secret   : options.tokensecret
+         access_token: options.access_token
 
       @groups_ids = @resolving_groups_ids options.groups
       @reply_self = options.reply_self
     else
-      throw new Error "Not enough parameters provided. I need a key, a secret, a token, a secret token"
+      throw new Error "Not enough parameters provided. I need an access token"
 
- ## Yammer API call methods    
+ ## Yammer API call methods
  listen: (callback) ->
    @yammer.realtime.messages (err, data) ->
      callback err, data.data
