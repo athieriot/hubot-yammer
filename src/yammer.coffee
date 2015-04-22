@@ -125,8 +125,11 @@ class YammerRealtime extends EventEmitter
    #TODO: Need to make this function using a callback
    #      I don't thing this will really work with too many groups
    result = []
+   params =
+     qs:
+       mine: 1
 
-   @yammer.groups (err, data) ->
+   @yammer.groups params, (err, data) ->
       if err
          console.log "yammer groups error: #{err} #{data}"
       else
