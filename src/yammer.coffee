@@ -77,7 +77,8 @@ class YammerRealtime extends EventEmitter
  ## Yammer API call methods
  listen: (callback) ->
    @yammer.realtime.messages (err, data) ->
-     callback err, data.data
+     if 'data' of data
+       callback err, data.data
 
  send: (user, yamText) ->
    if user && user.thread_id
