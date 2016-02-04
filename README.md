@@ -7,7 +7,6 @@ send a message to him with Yammer and he will happily reply the same way.
 
 ## Installation
 
-* Add `hubot-yammer` as a dependency in your hubot's `package.json`
 * Install dependencies with `npm install`
 * Run hubot with `bin/hubot -a yammer -n the_name_of_the_yammer_bot_account`
 
@@ -27,58 +26,35 @@ You will need to set some environment variables to use this adapter.
 
 ### Heroku
 
-    % heroku config:add HUBOT_YAMMER_KEY="key" 
-    % heroku config:add HUBOT_YAMMER_SECRET="secret" 
-    % heroku config:add HUBOT_YAMMER_TOKEN="token" 
-    % heroku config:add HUBOT_YAMMER_TOKEN_SECRET="secret" 
+    % heroku config:add HUBOT_YAMMER_ACCESS_TOKEN="access_token"
     % heroku config:add HUBOT_YAMMER_GROUPS="groups list"
 
 ### Non-Heroku environment variables
 
-    % export HUBOT_YAMMER_KEY="key"
-    % export HUBOT_YAMMER_SECRET="secret"
-    % export HUBOT_YAMMER_TOKEN="token"
-    % export HUBOT_YAMMER_TOKEN_SECRET="secret"
+    % export HUBOT_YAMMER_ACCESS_TOKEN="access_token"
     % export HUBOT_YAMMER_GROUPS="groups list"
 
-## How do you get your credential informations
+## How do you get your access token
 
-An easy way to get your access codes is to use [nyam](https://github.com/csanz/node-nyam).
+Here's how to get a valid Yammer OAuth2 token with the standard OAuth2 authorization flow.
 
-Nyam is a node.js CLI tool wich can help you to setup Yammer authorizations.
+See [Yammer documentation](https://developer.yammer.com/api/oauth2.html) for more details.
 
-First, log on to Yammer and get your own application keys.
+* Register a new application on Yammer at `https://www.yammer.com/client_applications`. Leave the callback URLs empty
+* Take notes of your `consumer_key` and `consumer_secret`
+* Make a new bot user on Yammer.
+* Sign in as the new bot user on Yammer
+* Go to `https://www.yammer.com/dialog/oauth?client_id=<consumer_key>`
+* There's an authorization dialog. Authorize the app
+* Look at the URL bar and there's a `code=<CODE>` query parameter in there, copy that
+* `curl https://www.yammer.com/oauth2/access_token?code=<CODE>&client_id=<consumer_key>&client_secret=<consumer_secret>`
+* you'll get a big JSON that contains `access_token`
 
-    https://www.yammer.com/<DOMAIN>/client_applications/new
-
-Install nyam
-
-    npm install nyam -g
-
-__Warning__: Actually, nyam need a 0.4.x version of node.js. You may want to look at [nvm](https://github.com/creationix/nvm)
-
-To override nyam configuration with your own app keys create the following file:
-
-    ~/.nyam_keys
-
-and add the following
-
-    {
-        "app_consumer_key": "<CONSUMER KEY HERE>",
-        "app_consumer_secret": "<CONSUMER SECRET HERE>"
-    }
-
-Then, start the setup process to give hubot-yammer access to an account 
-
-    nyam -s
-
-Finally, run nyam with a verbose level to display all the informations you need
-
-    nyam --verbose
+Now set the token to `HUBOT_YAMMER_ACCESSTOKEN`.
 
 ## Contribute
 
-Just send pull request if needed or fill an issue !
+Just send pull request if needed or fill an issue!
 
 ## Copyright
 
@@ -92,4 +68,3 @@ Copyright &copy; Aurélien Thieriot. See LICENSE for details.
 
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/athieriot/hubot-yammer/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-

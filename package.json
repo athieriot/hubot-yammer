@@ -1,6 +1,6 @@
 {
   "name": "hubot-yammer",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "author": "Aurélien Thieriot",
   "keywords": [
     "github hubot yammer adapter"
@@ -18,7 +18,8 @@
   },
   "dependencies": {
     "hubot": ">=2.3.0",
-    "request": "2.9.3" 
+    "request": "2.9.3",
+    "yammer": "0.1.0"
   },
   "devDependencies": {
     "coffee-script": "1.1.3"
