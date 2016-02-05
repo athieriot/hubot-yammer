@@ -32,7 +32,7 @@ class YammerAdapter extends Adapter
       # for debugging use:  HUBOT_YAMMER_REPLY_SELF=1
       # bin/hubot -n bot -a yammer
 
-    bot = new YammerRealtime options, robot
+    bot = new YammerRealtime options, @robot
     bot.listen (err, data) ->
       user_name = (reference.name for reference in data.references when reference.type is "user")
       self_id = data.meta.current_user_id
