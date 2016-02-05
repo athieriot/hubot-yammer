@@ -46,13 +46,13 @@ class YammerAdapter extends Adapter
           if self_id == sender_id && !bot.reply_self
             me = @robot.name
             @robot.logger.debug "Skipping a message from self."
-            else
-              user =
-                name: user_name
-                id: sender_id
-                thread_id: thread_id
-              self.receive new TextMessage user, text
-      @robot.logger.error "received error: #{err}" if err
+          else
+            user =
+              name: user_name
+              id: sender_id
+              thread_id: thread_id
+            self.receive new TextMessage user, text
+      @robot.logger.error "Received a error: #{err}" if err
 
     @bot = bot
     @emit 'connected'
@@ -134,6 +134,6 @@ class YammerRealtime extends EventEmitter
       @robot.logger.info "Allowed groups: " + groups
       @robot.logger.info "Group IDs: " + result
 
-      throw new Error "No groups selected or ID resolution failed." if no result.length
+      throw new Error "No groups selected or ID resolution failed." if not result.length
 
     result
