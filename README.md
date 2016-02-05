@@ -1,5 +1,7 @@
 # Hubot Yammer Adapter
 
+[![Build Status](https://travis-ci.org/athieriot/hubot-yammer.svg?branch=master)](https://travis-ci.org/athieriot/hubot-yammer)
+
 ## Description
 
 This is the [Yammer](http://www.yammer.com) adapter for hubot that allows you to
