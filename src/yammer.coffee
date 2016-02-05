@@ -7,6 +7,9 @@ EventEmitter = require('events').EventEmitter
 Yammer       = require('yammer').Yammer
 
 class YammerAdapter extends Adapter
+  constructor: (robot) ->
+    super
+
   message = (envelope, strings...) ->
     user = envelope.user or envelope
     strings.forEach (str) =>
@@ -23,8 +26,6 @@ class YammerAdapter extends Adapter
       callback yamText
 
   run: ->
-    self = @
-
     options =
       access_token: process.env.HUBOT_YAMMER_ACCESS_TOKEN
       groups:       process.env.HUBOT_YAMMER_GROUPS or "hubot"
@@ -32,8 +33,8 @@ class YammerAdapter extends Adapter
       # for debugging use:  HUBOT_YAMMER_REPLY_SELF=1
       # bin/hubot -n bot -a yammer
 
-    bot = new YammerRealtime options, @robot
-    bot.listen (err, data) ->
+    bot = new YammerRealtime(options, @robot)
+    bot.listen (err, data) =>
       user_name = (reference.name for reference in data.references when reference.type is "user")
       self_id = data.meta.current_user_id
       data.messages.forEach (message) =>
@@ -51,7 +52,7 @@ class YammerAdapter extends Adapter
               name: user_name
               id: sender_id
               thread_id: thread_id
-            self.receive new TextMessage user, text
+            @robot.receive new TextMessage user, text
       @robot.logger.error "Received a error: #{err}" if err
 
     @bot = bot
@@ -63,6 +64,7 @@ exports.use = (robot) ->
 class YammerRealtime extends EventEmitter
   constructor: (options, robot) ->
     if options.access_token?
+      @robot = robot
       @yammer = new Yammer(access_token: options.access_token)
       @groups_ids = @resolving_groups_ids options.groups
       @reply_self = options.reply_self
@@ -110,7 +112,7 @@ class YammerRealtime extends EventEmitter
         # let yammer do its best...
         params['og_fetch'] = true
 
-    @yammer.createMessage params, (err, data, res) ->
+    @yammer.createMessage params, (err, data, res) =>
       @robot.logger.error "Yammer error: #{err} #{data}" if err
       @robot.logger.info "Message creation status #{res.statusCode}"
 
@@ -122,7 +124,7 @@ class YammerRealtime extends EventEmitter
       qs:
         mine: 1
 
-    @yammer.groups params, (err, data) ->
+    @yammer.groups params, (err, data) =>
       if err
         @robot.logger.error "Groups error (#{err}): #{data}"
       else
