@@ -114,7 +114,7 @@ class YammerRealtime extends EventEmitter
       @robot.logger.error "Yammer error: #{err} #{data}" if err
       @robot.logger.info "Message creation status #{res.statusCode}"
 
- resolving_groups_ids: (groups) ->
+  resolving_groups_ids: (groups) ->
     #TODO: Need to make this function using a callback
     #      I don't think this will really work with too many groups
     result = []
