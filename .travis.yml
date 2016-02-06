@@ -1,3 +1,10 @@
 language: node_js
 node_js:
-  - "4.1"
+  - '4.1'
+deploy:
+  provider: npm
+  email: a.thieriot@gmail.com
+  api_key:
+    secure: P6nY+WYtprS/0YtOEnJvYp63O49shObaV/L5Df51nRLZG7bVVJIuhq/v7GEfRMnBfvNIXCvUt3eOhT6Xnihyk0k6PBHZqeuo15KZneDZuaDSoIwRHhe3JFvGPj60LLpz6FyXMV3mPOVLwxjA9JuZFi+PxCXSvznko4qTHgOAXpM=
+  on:
+    tags: true
