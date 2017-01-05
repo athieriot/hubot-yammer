@@ -130,7 +130,7 @@ class YammerRealtime extends EventEmitter
       else
         data.forEach (existing_group) =>
           groups.split(",").forEach (group) =>
-            if group.toString().toLowerCase() is existing_group.name.toString().toLowerCase()
+            if group.toString().toLowerCase() is existing_group.full_name.toString().toLowerCase()
               result.push existing_group.id
 
       @robot.logger.info "Allowed groups: " + groups
